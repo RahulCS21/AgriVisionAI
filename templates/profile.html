@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t("User Profile") }} | AgriVision AI{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <div class="section-kicker"><i class="bi bi-person-circle me-1" aria-hidden="true"></i> {{ t("Your account") }}</div>
+        <h1>{{ t("User Profile") }}</h1>
+        <p>{{ t("Manage your AgriVision AI account and review your activity.") }}</p>
+    </div>
+</section>
+<section class="pb-5">
+    <div class="container">
+        <div class="tool-card p-4 p-md-5 mx-auto" style="max-width: 760px;">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="tool-icon"><i class="bi bi-person" aria-hidden="true"></i></div>
+                <div>
+                    <h2 class="h5 fw-bold mb-1">{{ user.username }}</h2>
+                    <p class="small text-secondary mb-0">{{ t("Member since") }} {{ user.created_at }} UTC</p>
+                </div>
+            </div>
+            <div class="row g-3 mb-4">
+                <div class="col-sm-6">
+                    <article class="dashboard-stat h-100">
+                        <div class="stat-icon"><i class="bi bi-clipboard-data" aria-hidden="true"></i></div>
+                        <div><div class="stat-value">{{ activity.total }}</div><div class="stat-label">{{ t("Your saved activity") }}</div></div>
+                    </article>
+                </div>
+                <div class="col-sm-6">
+                    <article class="dashboard-stat h-100">
+                        <div class="stat-icon"><i class="bi bi-clock-history" aria-hidden="true"></i></div>
+                        <div>
+                            <div class="stat-value stat-value-compact">{{ t("Available") if activity.last_activity else t("No activity yet") }}</div>
+                            <div class="stat-label">{{ t("Last activity") }}{% if activity.last_activity %}: {{ activity.last_activity }} UTC{% endif %}</div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-success" href="{{ url_for('prediction_history_page') }}"><i class="bi bi-clock-history me-1" aria-hidden="true"></i>{{ t("Prediction History") }}</a>
+                <a class="btn btn-outline-success" href="{{ url_for('prediction_reports_page') }}"><i class="bi bi-file-earmark-bar-graph me-1" aria-hidden="true"></i>{{ t("Reports") }}</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

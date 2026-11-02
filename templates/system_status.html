@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t("System Status") }} | AgriVision AI{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <div class="section-kicker"><i class="bi bi-heart-pulse me-1" aria-hidden="true"></i> {{ t("Platform health") }}</div>
+        <h1>{{ t("System Status") }}</h1>
+        <p>{{ t("Current application, model, database, and external API availability.") }}</p>
+    </div>
+</section>
+<section class="pb-5">
+    <div class="container">
+        <h2 class="h3 fw-bold text-forest mb-3">{{ t("System Health") }}</h2>
+        {% include "_system_health_cards.html" %}
+        <p class="small text-secondary mt-3 mb-0">{{ t("The API status performs a live Open-Meteo weather lookup. Model status reflects the configured inference capability; missing models never produce placeholder predictions.") }}</p>
+    </div>
+</section>
+{% endblock %}

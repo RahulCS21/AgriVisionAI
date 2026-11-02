@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t("Crop Yield Prediction") }} | AgriVision AI{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <div class="section-kicker"><i class="bi bi-graph-up-arrow me-1" aria-hidden="true"></i> {{ t("Crop insights") }}</div>
+        <h1>{{ t("Crop Yield Prediction") }}</h1>
+        <p>{{ t("Estimate crop yield from temperature, rainfall, and humidity.") }}</p>
+    </div>
+</section>
+<section class="pb-5">
+    <div class="container">
+        <div class="tool-card p-4 p-md-5 mx-auto" style="max-width: 760px;">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="tool-icon"><i class="bi bi-bar-chart-line" aria-hidden="true"></i></div>
+                <div><h2 class="h5 fw-bold mb-1">{{ t("Growing conditions") }}</h2><p class="small text-secondary mb-0">{{ t("Enter your local conditions to get a crop yield estimate.") }}</p></div>
+            </div>
+            {% if not model_ready %}
+                <p class="small text-secondary mb-4" role="status"><i class="bi bi-info-circle me-1" aria-hidden="true"></i>{{ t("Yield predictions are currently unavailable. Please try again later.") }}</p>
+            {% endif %}
+            {% if error %}
+                <div class="alert alert-danger" role="alert"><i class="bi bi-exclamation-circle me-2" aria-hidden="true"></i>{{ error }}</div>
+            {% endif %}
+            {% if result %}
+                <div class="prediction-result mb-4" role="status">
+                    <span class="prediction-result-icon"><i class="bi bi-check2-circle" aria-hidden="true"></i></span>
+                    <p class="mb-0 fw-semibold">{{ result }}</p>
+                </div>
+            {% endif %}
+            <form method="post" action="{{ url_for('yield_page') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label" for="temperature">{{ t("Temperature") }}</label>
+                        <div class="input-group">
+                            <input class="form-control" id="temperature" name="temperature" type="number" min="-90" max="60" step="any" value="{{ values.temperature }}" placeholder="e.g. 25" required>
+                            <span class="input-group-text">°C</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="rainfall">{{ t("Rainfall") }}</label>
+                        <div class="input-group">
+                            <input class="form-control" id="rainfall" name="rainfall" type="number" min="0" step="any" value="{{ values.rainfall }}" placeholder="e.g. 100" required>
+                            <span class="input-group-text">mm</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="humidity">{{ t("Humidity") }}</label>
+                        <div class="input-group">
+                            <input class="form-control" id="humidity" name="humidity" type="number" min="0" max="100" step="any" value="{{ values.humidity }}" placeholder="e.g. 60" required>
+                            <span class="input-group-text">%</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-success btn-lg w-100 mt-4" type="submit"><i class="bi bi-stars me-2" aria-hidden="true"></i>{{ t("Generate Yield Estimate") }}</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

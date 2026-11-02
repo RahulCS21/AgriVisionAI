@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}User Management | AgriVision AI{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <div class="section-kicker"><i class="bi bi-people me-1" aria-hidden="true"></i> Administration</div>
+        <h1>User management</h1>
+        <p>Review registered accounts and their saved activity.</p>
+        <div class="d-flex flex-wrap gap-2 mt-3">
+            <a class="btn btn-outline-success btn-sm" href="{{ url_for('admin_dashboard') }}">Admin dashboard</a>
+            <a class="btn btn-outline-success btn-sm" href="{{ url_for('admin_prediction_logs') }}">Prediction logs</a>
+            <a class="btn btn-outline-success btn-sm" href="{{ url_for('admin_reports') }}">Reports</a>
+            <a class="btn btn-outline-success btn-sm" href="{{ url_for('admin_system_status') }}">System status</a>
+        </div>
+    </div>
+</section>
+<section class="pb-5">
+    <div class="container">
+        <div class="tool-card overflow-hidden">
+            {% if users %}
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead class="table-light"><tr><th>Username</th><th>Registered</th><th>Saved activity</th><th>Last activity</th></tr></thead>
+                        <tbody>
+                            {% for user in users %}
+                                <tr>
+                                    <td class="fw-semibold">{{ user.username }}</td>
+                                    <td class="small">{{ user.created_at }} UTC</td>
+                                    <td>{{ user.activity_count }}</td>
+                                    <td class="small">{{ user.last_activity or "No activity yet" }}{% if user.last_activity %} UTC{% endif %}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="p-5 text-center text-secondary">No user accounts have been registered.</div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

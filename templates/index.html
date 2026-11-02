@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}AgriVision AI | Smarter Agriculture{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container hero-content">
+        <span class="eyebrow"><i class="bi bi-stars" aria-hidden="true"></i> {{ t("Intelligent tools for agriculture") }}</span>
+        <h1>{{ t("Grow with insight.") }}<br><span>{{ t("Harvest with confidence.") }}</span></h1>
+        <p class="hero-copy">{{ t("Explore crop planning, yield insights, plant health guidance, soil recommendations, and local weather in one place.") }}</p>
+        <div class="d-flex flex-wrap gap-3 mt-4">
+            <a class="btn btn-leaf btn-lg px-4" href="{{ url_for('yield_page') }}">{{ t("Explore the tools") }} <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i></a>
+            <a class="btn btn-outline-light btn-lg px-4" href="{{ url_for('about_page') }}">{{ t("About AgriVision") }}</a>
+        </div>
+        <div class="d-flex flex-wrap gap-4 gap-md-5 mt-5 small text-white-50">
+            <span><i class="bi bi-graph-up-arrow text-white me-2" aria-hidden="true"></i>{{ t("Yield insights") }}</span>
+            <span><i class="bi bi-shield-check text-white me-2" aria-hidden="true"></i>{{ t("Plant health") }}</span>
+            <span><i class="bi bi-moisture text-white me-2" aria-hidden="true"></i>{{ t("Soil guidance") }}</span>
+        </div>
+    </div>
+</section>
+
+<section class="section-space">
+    <div class="container">
+        <div class="mb-4 mb-lg-5">
+            <div class="section-kicker mb-2">{{ t("Explore AgriVision") }}</div>
+            <h2 class="section-heading mb-2">{{ t("A clearer view of your crops") }}</h2>
+            <p class="section-intro mb-0">{{ t("Choose a tool to turn crop and soil information into useful next steps.") }}</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6 col-xl-3">
+                <article class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i></div>
+                    <h3>{{ t("Crop Yield Prediction") }}</h3>
+                    <p>{{ t("Estimate crop yield from local growing conditions.") }}</p>
+                    <a class="text-link" href="{{ url_for('yield_page') }}">{{ t("Estimate crop yield") }} <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i></a>
+                </article>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <article class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-camera" aria-hidden="true"></i></div>
+                    <h3>{{ t("Disease Detection") }}</h3>
+                    <p>{{ t("Review plant health with a clear leaf image.") }}</p>
+                    <a class="text-link" href="{{ url_for('disease_page') }}">{{ t("Analyze a leaf image") }} <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i></a>
+                </article>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <article class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-droplet-half" aria-hidden="true"></i></div>
+                    <h3>{{ t("Fertilizer Recommendation") }}</h3>
+                    <p>{{ t("Use Soil Health Card ratings to review qualitative nutrient guidance; no application rates are calculated.") }}</p>
+                    <a class="text-link" href="{{ url_for('fertilizer_page') }}">{{ t("View guidance") }} <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i></a>
+                </article>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <article class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-signpost-split" aria-hidden="true"></i></div>
+                    <h3>{{ t("Crop Recommendation") }}</h3>
+                    <p>{{ t("Screen broad Indian crop suitability ranges using soil, season, temperature, and rainfall.") }}</p>
+                    <a class="text-link" href="{{ url_for('crop_recommendation_page') }}">{{ t("Plan your crop") }} <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i></a>
+                </article>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <article class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-cloud-sun" aria-hidden="true"></i></div>
+                    <h3>{{ t("Weather Dashboard") }}</h3>
+                    <p>{{ t("Retrieve live weather for an Indian city or district.") }}</p>
+                    <a class="text-link" href="{{ url_for('weather_dashboard') }}">{{ t("View weather") }} <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i></a>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

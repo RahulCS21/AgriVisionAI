@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t("Fertilizer Recommendation") }} | AgriVision AI{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <div class="section-kicker"><i class="bi bi-droplet-half me-1" aria-hidden="true"></i> {{ t("Soil guidance") }}</div>
+        <h1>{{ t("Fertilizer Recommendation") }}</h1>
+        <p>{{ t("Use your Soil Health Card nutrient ratings to review cautious, crop-aware nutrient guidance.") }}</p>
+    </div>
+</section>
+<section class="pb-5">
+    <div class="container">
+        <div class="tool-card p-4 p-md-5 mx-auto" style="max-width: 760px;">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="tool-icon"><i class="bi bi-moisture" aria-hidden="true"></i></div>
+                <div><h2 class="h5 fw-bold mb-1">{{ t("Soil test results") }}</h2><p class="small text-secondary mb-0">{{ t("Enter the lab values and Low, Medium, or High ratings printed on your Soil Health Card.") }}</p></div>
+            </div>
+            <div class="alert alert-info small" role="note">{{ t("Numeric soil-test cutoffs vary by laboratory method, soil, crop, and state. Advice is based on the Soil Health Card rating you select; numeric values are recorded for reference and do not determine fertilizer dose.") }}</div>
+            {% if error %}
+                <div class="alert alert-danger" role="alert"><i class="bi bi-exclamation-circle me-2" aria-hidden="true"></i>{{ error }}</div>
+            {% endif %}
+            {% if result %}
+                <div class="feature-card border-success-subtle bg-success-subtle mb-4" role="status">
+                    <h2 class="h5 fw-bold text-forest"><i class="bi bi-clipboard2-check me-2" aria-hidden="true"></i>{{ t("Soil Health Card guidance") }}</h2>
+                    <ul class="mb-2">
+                        {% for recommendation in recommendations %}
+                            <li class="mb-2"><strong>{{ t(recommendation.nutrient) }} ({{ t(statuses[recommendation.key]) }}):</strong> {{ recommendation.advice }}</li>
+                        {% endfor %}
+                    </ul>
+                    <p class="small text-secondary mb-0">{{ t("No fertilizer rates are calculated. Follow the crop- and district-specific Soil Health Card or state agriculture package, and consult a local KVK before application.") }}</p>
+                </div>
+            {% endif %}
+            <form method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <div class="row g-3">
+                    {% for key, nutrient in (("nitrogen", "Nitrogen (N)"), ("phosphorus", "Phosphorus (P)"), ("potassium", "Potassium (K)")) %}
+                        <div class="col-md-4">
+                            <article class="feature-card h-100">
+                                <h3 class="h6 fw-bold text-forest">{{ t(nutrient) }}</h3>
+                                <label class="form-label small" for="{{ key }}">{{ t("Lab value as reported") }}</label>
+                                <input class="form-control mb-3" id="{{ key }}" name="{{ key }}" type="number" min="0" step="any" value="{{ values[key] }}" required>
+                                <label class="form-label small" for="{{ key }}_status">{{ t("Soil Health Card rating") }}</label>
+                                <select class="form-select" id="{{ key }}_status" name="{{ key }}_status" required>
+                                    <option value="">{{ t("Choose a rating") }}</option>
+                                    {% for rating in ("Low", "Medium", "High") %}
+                                        <option value="{{ rating }}" {% if statuses[key] == rating %}selected{% endif %}>{{ t(rating) }}</option>
+                                    {% endfor %}
+                                </select>
+                            </article>
+                        </div>
+                    {% endfor %}
+                </div>
+                <button class="btn btn-success btn-lg w-100 mt-4" type="submit"><i class="bi bi-lightbulb me-2" aria-hidden="true"></i>{{ t("Get Recommendation") }}</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

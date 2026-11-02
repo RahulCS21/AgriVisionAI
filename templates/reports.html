@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t("Prediction Reports") }} | AgriVision AI{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <div class="section-kicker"><i class="bi bi-file-earmark-bar-graph me-1" aria-hidden="true"></i> {{ t("Insights") }}</div>
+        <h1>{{ t("Prediction Reports") }}</h1>
+        <p>{{ t("A summary of saved activity across the prediction and recommendation modules.") }}</p>
+    </div>
+</section>
+<section class="dashboard-stats-wrap pt-0">
+    <div class="container">
+        <div class="row g-3">
+            <div class="col-6 col-md-4 col-xl">
+                <article class="dashboard-stat">
+                    <div class="stat-icon"><i class="bi bi-clipboard-data" aria-hidden="true"></i></div>
+                    <div><div class="stat-value">{{ prediction_statistics.total_predictions }}</div><div class="stat-label">{{ t("Total Predictions") }}</div></div>
+                </article>
+            </div>
+            <div class="col-6 col-md-4 col-xl">
+                <article class="dashboard-stat">
+                    <div class="stat-icon"><i class="bi bi-shield-check" aria-hidden="true"></i></div>
+                    <div><div class="stat-value">{{ prediction_statistics.disease_scans }}</div><div class="stat-label">{{ t("Disease Scans") }}</div></div>
+                </article>
+            </div>
+            <div class="col-6 col-md-4 col-xl">
+                <article class="dashboard-stat">
+                    <div class="stat-icon"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i></div>
+                    <div><div class="stat-value">{{ prediction_statistics.yield_predictions }}</div><div class="stat-label">{{ t("Yield Predictions") }}</div></div>
+                </article>
+            </div>
+            <div class="col-6 col-md-4 col-xl">
+                <article class="dashboard-stat">
+                    <div class="stat-icon"><i class="bi bi-droplet-half" aria-hidden="true"></i></div>
+                    <div><div class="stat-value">{{ prediction_statistics.fertilizer_recommendations }}</div><div class="stat-label">{{ t("Fertilizer Recommendations") }}</div></div>
+                </article>
+            </div>
+            <div class="col-6 col-md-4 col-xl">
+                <article class="dashboard-stat">
+                    <div class="stat-icon"><i class="bi bi-signpost-split" aria-hidden="true"></i></div>
+                    <div><div class="stat-value">{{ prediction_statistics.crop_recommendations }}</div><div class="stat-label">{{ t("Crop Recommendations") }}</div></div>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="pb-5">
+    <div class="container">
+        <div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-3">
+            <div>
+                <div class="section-kicker mb-1">{{ t("Report details") }}</div>
+                <h2 class="h3 fw-bold text-forest mb-0">{{ t("Recent prediction activity") }}</h2>
+            </div>
+            <a class="btn btn-outline-success btn-sm" href="{{ url_for('admin_dashboard' if is_admin else 'prediction_history_page') }}"><i class="bi bi-clock-history me-1" aria-hidden="true"></i>{{ t("View full history") }}</a>
+        </div>
+        {% include "_prediction_records.html" %}
+    </div>
+</section>
+{% endblock %}

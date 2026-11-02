@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t("Crop Recommendation") }} | AgriVision AI{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <div class="section-kicker"><i class="bi bi-signpost-split me-1" aria-hidden="true"></i> {{ t("Crop planning") }}</div>
+        <h1>{{ t("Crop Recommendation") }}</h1>
+        <p>{{ t("Compare major Indian crops with broad soil, season, temperature, and monsoon-rainfall suitability bands.") }}</p>
+    </div>
+</section>
+<section class="pb-5">
+    <div class="container">
+        <div class="tool-card p-4 p-md-5 mx-auto" style="max-width: 800px;">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="tool-icon"><i class="bi bi-tree" aria-hidden="true"></i></div>
+                <div>
+                    <h2 class="h5 fw-bold mb-1">{{ t("Your field conditions") }}</h2>
+                    <p class="small text-secondary mb-0">{{ t("Enter your field conditions for a transparent rule-based screening.") }}</p>
+                </div>
+            </div>
+
+            {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    <i class="bi bi-exclamation-circle me-2" aria-hidden="true"></i>{{ error }}
+                </div>
+            {% endif %}
+            {% if result %}
+                <div class="crop-result-card mb-4" role="status">
+                    <div class="crop-result-icon"><i class="bi bi-flower1" aria-hidden="true"></i></div>
+                    <div>
+                        <div class="section-kicker mb-1">{{ t("Top crop for further consideration") }}</div>
+                        <h2 class="h3 fw-bold text-forest mb-1">{{ result }}</h2>
+                        <p class="small text-secondary mb-3">{{ t("This is a broad rule-based screening, not an AI prediction or a district-specific crop plan.") }}</p>
+                        <ul class="list-unstyled small mb-0">
+                            <li class="mb-1"><i class="bi bi-layers me-2 text-success" aria-hidden="true"></i>{{ t("Soil compatibility") }}: {{ t("Matches broad profile") if reasoning.soil_match else t("Outside broad profile") }} ({{ t(values.soil_type) }})</li>
+                            <li class="mb-1"><i class="bi bi-calendar3 me-2 text-success" aria-hidden="true"></i>{{ t("Season suitability") }}: {{ t("Matches broad profile") if reasoning.season_match else t("Outside broad profile") }} ({{ t(values.season) }})</li>
+                            <li class="mb-1"><i class="bi bi-thermometer-half me-2 text-success" aria-hidden="true"></i>{{ t("Temperature suitability") }}: {{ t("Matches broad profile") if reasoning.temperature_match else t("Outside broad profile") }} ({{ reasoning.temperature_range[0] }}–{{ reasoning.temperature_range[1] }} °C)</li>
+                            <li><i class="bi bi-cloud-rain me-2 text-success" aria-hidden="true"></i>{{ t("Growing-season rainfall suitability") }}: {{ t("Matches broad profile") if reasoning.rainfall_match else t("Outside broad profile") }} ({{ reasoning.rainfall_range[0] }}–{{ reasoning.rainfall_range[1] }} mm)</li>
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+
+            <form method="post" action="{{ url_for('crop_recommendation_page') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label" for="soil_type"><i class="bi bi-layers me-1 text-success" aria-hidden="true"></i>{{ t("Soil Type") }}</label>
+                        <select class="form-select form-control" id="soil_type" name="soil_type" required>
+                            <option value="">{{ t("Choose your soil type") }}</option>
+                            {% for soil_type in soil_types %}
+                                <option value="{{ soil_type }}" {% if values.soil_type == soil_type %}selected{% endif %}>{{ t(soil_type) }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="season"><i class="bi bi-calendar3 me-1 text-success" aria-hidden="true"></i>{{ t("Growing season") }}</label>
+                        <select class="form-select" id="season" name="season" required>
+                            <option value="">{{ t("Choose a season") }}</option>
+                            {% for season in seasons %}
+                                <option value="{{ season }}" {% if values.season == season %}selected{% endif %}>{{ t(season) }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="temperature"><i class="bi bi-thermometer-half me-1 text-success" aria-hidden="true"></i>{{ t("Temperature") }}</label>
+                        <div class="input-group">
+                            <input class="form-control" id="temperature" name="temperature" type="number" step="any" min="-5" max="55" value="{{ values.temperature }}" placeholder="e.g. 25" required>
+                            <span class="input-group-text">°C</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="rainfall"><i class="bi bi-cloud-rain me-1 text-success" aria-hidden="true"></i>{{ t("Rainfall during crop season") }}</label>
+                        <div class="input-group">
+                            <input class="form-control" id="rainfall" name="rainfall" type="number" step="any" min="0" max="4000" value="{{ values.rainfall }}" placeholder="{{ t('Enter expected seasonal rainfall') }}" required>
+                            <span class="input-group-text">mm</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-success btn-lg w-100 mt-4" type="submit"><i class="bi bi-stars me-2" aria-hidden="true"></i>{{ t("Screen crop suitability") }}</button>
+                <p class="small text-secondary text-center mt-3 mb-0"><i class="bi bi-info-circle me-1" aria-hidden="true"></i>{{ t("Rainfall is the expected total over the crop season; monsoon distribution, irrigation, variety, district, and soil test can change suitability. Consult your Krishi Vigyan Kendra or state agriculture department.") }}</p>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

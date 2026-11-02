@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | AgriVision AI{% endblock %}
+
+{% block content %}
+<section class="dashboard-banner">
+    <div class="container dashboard-banner-content">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <span class="eyebrow"><i class="bi bi-grid-1x2" aria-hidden="true"></i> {{ t("AgriVision overview") }}</span>
+                <h1>{{ t("Your agriculture intelligence hub") }}</h1>
+                <p class="dashboard-banner-copy">{{ t("Explore practical tools for crop planning, plant health, soil insights, and changing field conditions—all in one place.") }}</p>
+                <a class="btn btn-leaf px-4" href="#modules">{{ t("Explore modules") }} <i class="bi bi-arrow-down ms-1" aria-hidden="true"></i></a>
+            </div>
+            <div class="col-lg-4 d-none d-lg-flex justify-content-center">
+                <div class="dashboard-banner-art" aria-hidden="true">
+                    <i class="bi bi-sun"></i>
+                    <i class="bi bi-cloud"></i>
+                    <i class="bi bi-flower1"></i>
+                    <i class="bi bi-flower1"></i>
+                    <i class="bi bi-flower1"></i>
+                    <i class="bi bi-flower1"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="dashboard-stats-wrap pt-0">
+    <div class="container">
+        <div class="row g-3">
+            <div class="col-6 col-md-4 col-xl">
+                <article class="dashboard-stat">
+                    <div class="stat-icon"><i class="bi bi-clipboard-data" aria-hidden="true"></i></div>
+                    <div><div class="stat-value">{{ prediction_statistics.total_predictions }}</div><div class="stat-label">{{ t("Total Predictions") }}</div></div>
+                </article>
+            </div>
+            <div class="col-6 col-md-4 col-xl">
+                <article class="dashboard-stat">
+                    <div class="stat-icon"><i class="bi bi-shield-check" aria-hidden="true"></i></div>
+                    <div><div class="stat-value">{{ prediction_statistics.disease_scans }}</div><div class="stat-label">{{ t("Disease Scans") }}</div></div>
+                </article>
+            </div>
+            <div class="col-6 col-md-4 col-xl">
+                <article class="dashboard-stat">
+                    <div class="stat-icon"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i></div>
+                    <div><div class="stat-value">{{ prediction_statistics.yield_predictions }}</div><div class="stat-label">{{ t("Yield Predictions") }}</div></div>
+                </article>
+            </div>
+            <div class="col-6 col-md-4 col-xl">
+                <article class="dashboard-stat">
+                    <div class="stat-icon"><i class="bi bi-droplet-half" aria-hidden="true"></i></div>
+                    <div><div class="stat-value">{{ prediction_statistics.fertilizer_recommendations }}</div><div class="stat-label">{{ t("Fertilizer Recommendations") }}</div></div>
+                </article>
+            </div>
+            <div class="col-6 col-md-4 col-xl">
+                <article class="dashboard-stat">
+                    <div class="stat-icon"><i class="bi bi-signpost-split" aria-hidden="true"></i></div>
+                    <div><div class="stat-value">{{ prediction_statistics.crop_recommendations }}</div><div class="stat-label">{{ t("Crop Recommendations") }}</div></div>
+                </article>
+            </div>
+        </div>
+        <div class="d-flex flex-wrap gap-2 mt-3">
+            <a class="btn btn-outline-success btn-sm" href="{{ url_for('prediction_history_page') }}"><i class="bi bi-clock-history me-1" aria-hidden="true"></i>{{ t("View prediction history") }}</a>
+            <a class="btn btn-outline-success btn-sm" href="{{ url_for('prediction_reports_page') }}"><i class="bi bi-file-earmark-bar-graph me-1" aria-hidden="true"></i>{{ t("View reports") }}</a>
+        </div>
+    </div>
+</section>
+
+<section class="section-space" id="modules">
+    <div class="container">
+        <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+            <div>
+                <div class="section-kicker mb-2">{{ t("Platform modules") }}</div>
+                <h2 class="section-heading mb-2">{{ t("Tools for every growing decision") }}</h2>
+                <p class="section-intro mb-0">{{ t("Choose a module to open its dedicated workspace.") }}</p>
+            </div>
+            <span class="dashboard-module-count"><i class="bi bi-check2-circle me-1" aria-hidden="true"></i>{{ total_features }} {{ t("platform modules") }}</span>
+        </div>
+        <div class="row g-4">
+            {% for feature in features %}
+                <div class="col-md-6 col-xl-4">
+                    <article class="feature-card dashboard-feature-card">
+                        <div class="d-flex justify-content-between align-items-start gap-3">
+                            <div class="feature-icon"><i class="bi {{ feature.icon }}" aria-hidden="true"></i></div>
+                            <span class="dashboard-feature-category">{{ t(feature.category) }}</span>
+                        </div>
+                        <h3>{{ t(feature.title) }}</h3>
+                        <span class="badge {% if feature.status == 'Available' %}text-bg-success-subtle text-success-emphasis{% else %}text-bg-light text-secondary{% endif %} mb-2">{{ t(feature.status) }}</span>
+                        <p>{{ t(feature.description) }}</p>
+                        <a class="text-link" href="{{ url_for(feature.endpoint) }}">{{ t(feature.action) }} <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i></a>
+                    </article>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="pb-5">
+    <div class="container pb-4">
+        <div class="dashboard-quick-links">
+            <div>
+                <div class="section-kicker mb-2">{{ t("Quick navigation") }}</div>
+                <h2 class="h4 fw-bold text-forest mb-1">{{ t("Go straight to a module") }}</h2>
+                <p class="small text-secondary mb-0">{{ t("Open a tool to enter field information or review insights.") }}</p>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+                {% for feature in features %}
+                    <a class="btn btn-outline-success btn-sm" href="{{ url_for(feature.endpoint) }}"><i class="bi {{ feature.icon }} me-1" aria-hidden="true"></i>{{ t(feature.title) }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

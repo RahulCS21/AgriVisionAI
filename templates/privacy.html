@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t("Privacy Policy") }} | AgriVision AI{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <div class="section-kicker"><i class="bi bi-shield-lock me-1" aria-hidden="true"></i> {{ t("Your information") }}</div>
+        <h1>{{ t("Privacy Policy") }}</h1>
+        <p>{{ t("A clear overview of information handled by this AgriVision AI demo.") }}</p>
+    </div>
+</section>
+<section class="pb-5">
+    <div class="container">
+        <article class="tool-card p-4 p-md-5 mx-auto" style="max-width: 860px;">
+            <h2 class="h5 fw-bold text-forest">{{ t("Information stored") }}</h2>
+            <p>{{ t("Account usernames and password hashes are stored in the application database. When you use an agricultural tool while signed in, submitted inputs and results may be saved to your account history. Weather searches may record the searched location.") }}</p>
+
+            <h2 class="h5 fw-bold text-forest mt-4">{{ t("Uploaded images") }}</h2>
+            <p>{{ t("Leaf images uploaded for screening may be stored by this demo application. Do not upload images or information you consider confidential. Disease screening may be unavailable when a compatible model is not installed.") }}</p>
+
+            <h2 class="h5 fw-bold text-forest mt-4">{{ t("Use and access") }}</h2>
+            <p>{{ t("Saved account history is available to the signed-in account and administrators with access to the application. This demo does not promise a specific retention period; contact the application operator with questions about stored data.") }}</p>
+
+            <h2 class="h5 fw-bold text-forest mt-4">{{ t("Questions") }}</h2>
+            <p class="mb-0">{{ t("For questions about this notice or information stored by the application,") }} <a href="{{ url_for('contact_page') }}">{{ t("contact the AgriVision AI team") }}</a>.</p>
+        </article>
+    </div>
+</section>
+{% endblock %}

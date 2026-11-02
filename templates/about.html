@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t("About Us") }} | AgriVision AI{% endblock %}
+
+{% block content %}
+<section class="about-hero" id="about">
+    <div class="container about-hero-content">
+        <span class="eyebrow"><i class="bi bi-globe2" aria-hidden="true"></i> {{ t("Agriculture, informed by intelligence") }}</span>
+        <h1>{{ t("Better insights for") }}<br><span>{{ t("a more resilient harvest.") }}</span></h1>
+        <p class="hero-copy">{{ t("AgriVision AI brings data-driven crop insights and practical decision support together to help make modern agriculture more informed, productive, and sustainable.") }}</p>
+        <a class="btn btn-leaf btn-lg px-4 mt-3" href="{{ url_for('yield_page') }}">{{ t("Explore our solutions") }} <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i></a>
+    </div>
+</section>
+
+<section class="section-space">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <article class="about-statement h-100">
+                    <div class="feature-icon"><i class="bi bi-bullseye" aria-hidden="true"></i></div>
+                    <div class="section-kicker mb-2">{{ t("Our mission") }}</div>
+                    <h2 class="h3 fw-bold text-forest mb-3">{{ t("Make agricultural insight more actionable") }}</h2>
+                    <p class="text-secondary mb-0">{{ t("Our mission is to make useful crop and soil insights easier to access, translating agricultural data into clear guidance that supports confident decisions throughout the growing cycle.") }}</p>
+                </article>
+            </div>
+            <div class="col-lg-6">
+                <article class="about-statement h-100">
+                    <div class="feature-icon"><i class="bi bi-eye" aria-hidden="true"></i></div>
+                    <div class="section-kicker mb-2">{{ t("Our vision") }}</div>
+                    <h2 class="h3 fw-bold text-forest mb-3">{{ t("A smarter, more sustainable food system") }}</h2>
+                    <p class="text-secondary mb-0">{{ t("We envision agriculture where timely information helps growers use resources wisely, respond to crop needs, and build productive farms that are better prepared for a changing climate.") }}</p>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 about-solutions">
+    <div class="container py-lg-4">
+        <div class="text-center mx-auto mb-4 mb-lg-5">
+            <div class="section-kicker mb-2">{{ t("Core features") }}</div>
+            <h2 class="section-heading mb-2">{{ t("AI-powered agriculture solutions") }}</h2>
+            <p class="section-intro mx-auto mb-0">{{ t("Explore crop, soil, plant health, and weather insights to support practical decisions throughout the growing cycle.") }}</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6 col-xl-3">
+                <article class="feature-card about-feature-card">
+                    <div class="feature-icon"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i></div>
+                    <h3>{{ t("Crop Yield Prediction") }}</h3>
+                    <p>{{ t("Estimate crop yield from local growing conditions.") }}</p>
+                    <a class="text-link" href="{{ url_for('yield_page') }}">{{ t("Explore yield insights") }} <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i></a>
+                </article>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <article class="feature-card about-feature-card">
+                    <div class="feature-icon"><i class="bi bi-shield-check" aria-hidden="true"></i></div>
+                    <h3>{{ t("Plant Disease Detection") }}</h3>
+                    <p>{{ t("Review plant health with a clear leaf image.") }}</p>
+                    <a class="text-link" href="{{ url_for('disease_page') }}">{{ t("Explore plant health") }} <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i></a>
+                </article>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <article class="feature-card about-feature-card">
+                    <div class="feature-icon"><i class="bi bi-droplet-half" aria-hidden="true"></i></div>
+                    <h3>{{ t("Fertilizer Recommendation") }}</h3>
+                    <p>{{ t("Review qualitative guidance from Soil Health Card ratings; numeric lab values do not produce a fertilizer dose.") }}</p>
+                    <a class="text-link" href="{{ url_for('fertilizer_page') }}">{{ t("Explore soil guidance") }} <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i></a>
+                </article>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <article class="feature-card about-feature-card">
+                    <div class="feature-icon"><i class="bi bi-signpost-split" aria-hidden="true"></i></div>
+                    <h3>{{ t("Crop Recommendation") }}</h3>
+                    <p>{{ t("Compare broad, manually curated crop suitability bands; this is not a district-specific crop plan.") }}</p>
+                    <a class="text-link" href="{{ url_for('crop_recommendation_page') }}">{{ t("Explore crop planning") }} <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i></a>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-space">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <article class="value-card h-100">
+                    <div class="value-icon"><i class="bi bi-recycle" aria-hidden="true"></i></div>
+                    <div>
+                        <div class="section-kicker mb-2">{{ t("Sustainable farming") }}</div>
+                        <h2 class="h3 fw-bold text-forest mb-3">{{ t("Grow more thoughtfully") }}</h2>
+                        <p class="text-secondary mb-0">{{ t("By making crop and nutrient information easier to consider, AgriVision AI supports more intentional input decisions and responsible stewardship of soil and water. Recommendations are decision support—not a substitute for local expertise or crop-specific advice.") }}</p>
+                    </div>
+                </article>
+            </div>
+            <div class="col-lg-6">
+                <article class="value-card h-100">
+                    <div class="value-icon"><i class="bi bi-lightbulb" aria-hidden="true"></i></div>
+                    <div>
+                        <div class="section-kicker mb-2">{{ t("Smart decision support") }}</div>
+                        <h2 class="h3 fw-bold text-forest mb-3">{{ t("Turn information into next steps") }}</h2>
+                        <p class="text-secondary mb-0">{{ t("Crop and soil insights, supported by local weather, help you explore practical next steps. Combine these insights with local agricultural expertise for important field decisions.") }}</p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="pb-5">
+    <div class="container pb-4">
+        <div class="developer-card p-4 p-md-5">
+            <div class="row align-items-center g-4">
+                <div class="col-auto">
+                    <div class="developer-avatar" aria-hidden="true"><i class="bi bi-person"></i></div>
+                </div>
+                <div class="col">
+                    <div class="section-kicker mb-2">{{ t("The person behind AgriVision AI") }}</div>
+                    <h2 class="h3 fw-bold text-forest mb-1">Rahul Sharma C.</h2>
+                    <p class="text-secondary mb-0">{{ t("Developer, AgriVision AI") }}</p>
+                </div>
+                <div class="col-12 col-lg-auto">
+                    <div class="d-flex flex-column flex-sm-row flex-wrap gap-3">
+                        <a class="developer-link" href="mailto:420dutyon@gmail.com"><i class="bi bi-envelope me-2" aria-hidden="true"></i>420dutyon@gmail.com</a>
+                        <a class="developer-link" href="https://github.com/RahulCS21" target="_blank" rel="noopener noreferrer"><i class="bi bi-github me-2" aria-hidden="true"></i>{{ t("GitHub profile") }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

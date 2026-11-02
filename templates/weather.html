@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t("Weather Dashboard") }} | AgriVision AI{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <div class="section-kicker"><i class="bi bi-cloud-sun me-1" aria-hidden="true"></i> {{ t("Field conditions") }}</div>
+        <h1>{{ t("Weather Dashboard") }}</h1>
+        <p>{{ t("Enter an Indian city or district to retrieve current weather conditions.") }}</p>
+    </div>
+</section>
+<section class="pb-5">
+    <div class="container">
+        <form class="tool-card p-3 p-md-4 mb-4" method="get" action="{{ url_for('weather_dashboard') }}">
+            <label class="form-label fw-semibold" for="location">{{ t("Indian city or district") }}</label>
+            <div class="input-group">
+                <input class="form-control" id="location" name="location" type="search" maxlength="100" minlength="2" value="{{ location_query }}" placeholder="{{ t('e.g. Mysuru or Nashik') }}" required>
+                <button class="btn btn-success" type="submit"><i class="bi bi-search me-1" aria-hidden="true"></i>{{ t("Get live weather") }}</button>
+            </div>
+            <div class="form-text">{{ t("Location search is restricted to India. Weather is supplied by Open-Meteo.") }}</div>
+        </form>
+        {% if error %}
+            <div class="alert alert-warning" role="alert"><i class="bi bi-exclamation-triangle me-2" aria-hidden="true"></i>{{ error }}</div>
+        {% endif %}
+        {% if weather %}
+        <div class="weather-summary d-flex flex-wrap justify-content-between align-items-center gap-3 p-4 mb-4">
+            <div class="d-flex align-items-center gap-3">
+                <div class="weather-summary-icon"><i class="bi bi-geo-alt" aria-hidden="true"></i></div>
+                <div>
+                    <div class="small text-white-50">{{ t("Weather overview") }}</div>
+                    <h2 class="h5 fw-bold text-white mb-0">{{ t(weather.location) }}</h2>
+                </div>
+            </div>
+            <span class="badge text-bg-light"><i class="bi bi-cloud-check me-1" aria-hidden="true"></i>{{ t(weather.source) }}</span>
+        </div>
+
+        <div class="row g-3 g-lg-4">
+            <div class="col-6 col-lg-3">
+                <article class="weather-card h-100">
+                    <div class="weather-card-top">
+                        <div class="weather-icon temperature-icon"><i class="bi bi-thermometer-half" aria-hidden="true"></i></div>
+                        <span class="weather-label">{{ t("Temperature") }}</span>
+                    </div>
+                    <div class="weather-value">{{ weather.temperature }}<span>°C</span></div>
+                    <p class="weather-note mb-0">{{ t("Air temperature") }}</p>
+                </article>
+            </div>
+            <div class="col-6 col-lg-3">
+                <article class="weather-card h-100">
+                    <div class="weather-card-top">
+                        <div class="weather-icon humidity-icon"><i class="bi bi-moisture" aria-hidden="true"></i></div>
+                        <span class="weather-label">{{ t("Humidity") }}</span>
+                    </div>
+                    <div class="weather-value">{{ weather.humidity }}<span>%</span></div>
+                    <p class="weather-note mb-0">{{ t("Relative humidity") }}</p>
+                </article>
+            </div>
+            <div class="col-6 col-lg-3">
+                <article class="weather-card h-100">
+                    <div class="weather-card-top">
+                        <div class="weather-icon rain-icon"><i class="bi bi-cloud-rain" aria-hidden="true"></i></div>
+                        <span class="weather-label">{{ t("Rainfall Probability") }}</span>
+                    </div>
+                    <div class="weather-value">{{ weather.rainfall_probability }}<span>%</span></div>
+                    <p class="weather-note mb-0">{{ t("Chance of precipitation") }}</p>
+                </article>
+            </div>
+            <div class="col-6 col-lg-3">
+                <article class="weather-card h-100">
+                    <div class="weather-card-top">
+                        <div class="weather-icon wind-icon"><i class="bi bi-wind" aria-hidden="true"></i></div>
+                        <span class="weather-label">{{ t("Wind Speed") }}</span>
+                    </div>
+                    <div class="weather-value">{{ weather.wind_speed }}<span>km/h</span></div>
+                    <p class="weather-note mb-0">{{ t("Wind near the field") }}</p>
+                </article>
+            </div>
+        </div>
+
+        <p class="weather-disclaimer mt-3 mb-0"><i class="bi bi-clock me-1" aria-hidden="true"></i>{{ t("Provider observation time:") }} {{ weather.observed_at }}. {{ t("Forecast values are model-based and may differ from local station observations.") }}</p>
+        {% else %}
+            <div class="tool-card p-4 p-md-5 text-center">
+                <div class="feature-icon mx-auto"><i class="bi bi-geo-alt" aria-hidden="true"></i></div>
+                <h2 class="h5 fw-bold text-forest">{{ t("Choose a location to view current conditions") }}</h2>
+                <p class="text-secondary mb-0">{{ t("No weather values are shown until a live location lookup succeeds.") }}</p>
+            </div>
+        {% endif %}
+        <div class="weather-impact-card mt-4">
+            <div class="weather-impact-icon"><i class="bi bi-flower2" aria-hidden="true"></i></div>
+            <div>
+                <div class="section-kicker mb-1">{{ t("Weather & crop yield") }}</div>
+                <h2 class="h5 fw-bold text-forest mb-2">{{ t("Conditions shape the growing season") }}</h2>
+                <p class="text-secondary mb-0">{{ t("Temperature affects crop development, humidity can influence plant stress and disease pressure, and rainfall determines water availability. Strong winds can damage crops and increase evaporation. Monitoring these conditions helps growers plan irrigation, field work, and other crop decisions.") }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

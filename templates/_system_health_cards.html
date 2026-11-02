@@ -1,0 +1,21 @@
+<div class="row g-3">
+    {% for component in system_health.components %}
+        <div class="col-sm-6 col-xl">
+            <article class="feature-card h-100">
+                <div class="d-flex justify-content-between align-items-start gap-2">
+                    <h3 class="h6 fw-bold mb-2">{{ t(component.label) }}</h3>
+                    <span class="badge {% if component.operational %}text-bg-success{% else %}text-bg-warning{% endif %}">
+                        {{ "✅" if component.operational else "⚠" }} {{ t(component.status) }}
+                    </span>
+                </div>
+                <p class="small text-secondary mb-2">{{ t(component.detail) }}</p>
+                {% if component.label == "Yield Status" and component.operational %}
+                    <span class="badge text-bg-info">{{ t("Experimental Demonstration Prediction") }}</span>
+                {% endif %}
+                {% if component.path %}
+                    <p class="small mb-0">{{ t("Required model path") }}: <code>{{ component.path }}</code></p>
+                {% endif %}
+            </article>
+        </div>
+    {% endfor %}
+</div>

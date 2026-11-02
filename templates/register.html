@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t("Create account") }} | AgriVision AI{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <div class="section-kicker"><i class="bi bi-person-plus me-1" aria-hidden="true"></i> {{ t("Get started") }}</div>
+        <h1>{{ t("Create account") }}</h1>
+        <p>{{ t("Create an account to save and review your activity.") }}</p>
+    </div>
+</section>
+<section class="pb-5">
+    <div class="container">
+        <div class="tool-card p-4 p-md-5 mx-auto" style="max-width: 520px;">
+            {% if error %}<div class="alert alert-danger" role="alert">{{ error }}</div>{% endif %}
+            <form method="post" action="{{ url_for('register', next=next_url) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <div class="mb-3">
+                    <label class="form-label" for="username">{{ t("Username") }}</label>
+                    <input class="form-control" id="username" name="username" type="text" value="{{ username }}" minlength="3" maxlength="32" pattern="[A-Za-z0-9_.-]{3,32}" autocomplete="username" required>
+                    <div class="form-text">{{ t("Use 3–32 letters, numbers, dots, dashes, or underscores.") }}</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="password">{{ t("Password") }}</label>
+                    <input class="form-control" id="password" name="password" type="password" minlength="8" maxlength="1024" autocomplete="new-password" required>
+                    <div class="form-text">{{ t("Use at least 8 characters.") }}</div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label" for="confirm_password">{{ t("Confirm password") }}</label>
+                    <input class="form-control" id="confirm_password" name="confirm_password" type="password" minlength="8" maxlength="1024" autocomplete="new-password" required>
+                </div>
+                <button class="btn btn-success btn-lg w-100" type="submit"><i class="bi bi-person-check me-2" aria-hidden="true"></i>{{ t("Create account") }}</button>
+            </form>
+            <p class="small text-secondary mt-3 mb-0">{{ t("Already have an account?") }} <a href="{{ url_for('login') }}">{{ t("Log in") }}</a></p>
+        </div>
+    </div>
+</section>
+{% endblock %}

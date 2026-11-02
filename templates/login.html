@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t("Log in") }} | AgriVision AI{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <div class="section-kicker"><i class="bi bi-person-lock me-1" aria-hidden="true"></i> {{ t("Welcome back") }}</div>
+        <h1>{{ t("Log in") }}</h1>
+        <p>{{ t("Sign in to view your saved predictions and reports.") }}</p>
+    </div>
+</section>
+<section class="pb-5">
+    <div class="container">
+        <div class="tool-card p-4 p-md-5 mx-auto" style="max-width: 520px;">
+            {% if error %}<div class="alert alert-danger" role="alert">{{ error }}</div>{% endif %}
+            <form method="post" action="{{ url_for('login', next=next_url) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <input type="hidden" name="next" value="{{ next_url }}">
+                <div class="mb-3">
+                    <label class="form-label" for="username">{{ t("Username") }}</label>
+                    <input class="form-control" id="username" name="username" type="text" value="{{ username }}" minlength="3" maxlength="32" autocomplete="username" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label" for="password">{{ t("Password") }}</label>
+                    <input class="form-control" id="password" name="password" type="password" maxlength="1024" autocomplete="current-password" required>
+                </div>
+                <button class="btn btn-success btn-lg w-100" type="submit"><i class="bi bi-box-arrow-in-right me-2" aria-hidden="true"></i>{{ t("Log in") }}</button>
+            </form>
+            <p class="small text-secondary mt-3 mb-0">{{ t("New to AgriVision AI?") }} <a href="{{ url_for('register') }}">{{ t("Create account") }}</a></p>
+        </div>
+    </div>
+</section>
+{% endblock %}

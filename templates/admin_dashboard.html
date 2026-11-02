@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard | AgriVision AI{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="container d-flex flex-wrap justify-content-between align-items-end gap-3">
+        <div>
+            <div class="section-kicker"><i class="bi bi-speedometer2 me-1" aria-hidden="true"></i> Administration</div>
+            <h1>Admin dashboard</h1>
+            <p>Review prediction activity and manage images uploaded for disease detection.</p>
+        </div>
+        <form method="post" action="{{ url_for('admin_logout') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <button class="btn btn-outline-success" type="submit"><i class="bi bi-box-arrow-right me-2" aria-hidden="true"></i>Log out</button>
+        </form>
+    </div>
+</section>
+<section class="pb-5">
+    <div class="container">
+        <div class="row g-3 mb-4">
+            {% set metrics = [
+                ("Total Users", total_users, "bi-people"),
+                ("Total Predictions", prediction_statistics.total_predictions, "bi-clipboard-data"),
+                ("Crop Yield Predictions", prediction_statistics.yield_predictions, "bi-graph-up-arrow"),
+                ("Disease Scans", prediction_statistics.disease_scans, "bi-shield-check"),
+                ("Fertilizer Recommendations", prediction_statistics.fertilizer_recommendations, "bi-moisture"),
+                ("Crop Recommendations", prediction_statistics.crop_recommendations, "bi-flower2"),
+                ("Weather Requests", prediction_statistics.weather_requests, "bi-cloud-sun"),
+            ] %}
+            {% for label, value, icon in metrics %}
+                <div class="col-6 col-lg-4 col-xl-3">
+                    <article class="tool-card h-100 p-3 p-md-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="tool-icon flex-shrink-0"><i class="bi {{ icon }}" aria-hidden="true"></i></span>
+                            <div>
+                                <div class="small text-secondary">{{ label }}</div>
+                                <div class="h3 fw-bold text-forest mb-0">{{ value }}</div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="d-flex flex-wrap gap-2 mb-4">
+            <a class="btn btn-success btn-sm" href="{{ url_for('admin_prediction_logs') }}">Prediction logs</a>
+            <a class="btn btn-outline-success btn-sm" href="{{ url_for('admin_user_activity') }}">User management</a>
+            <a class="btn btn-outline-success btn-sm" href="{{ url_for('admin_reports') }}">Reports</a>
+            <a class="btn btn-outline-success btn-sm" href="{{ url_for('admin_system_status') }}">System status</a>
+        </div>
+
+        <div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-3">
+            <div>
+                <div class="section-kicker mb-1">Activity</div>
+                <h2 class="h3 fw-bold text-forest mb-0">Prediction history</h2>
+            </div>
+            <span class="badge rounded-pill text-bg-light border px-3 py-2">{{ total_records }} total records</span>
+        </div>
+        <div class="d-flex flex-wrap gap-2 mb-3">
+            <a class="btn btn-outline-success btn-sm" href="{{ url_for('admin_reports') }}">Reports</a>
+            <a class="btn btn-outline-success btn-sm" href="{{ url_for('admin_system_status') }}">System status</a>
+            <a class="btn btn-outline-success btn-sm" href="{{ url_for('admin_user_activity') }}">User activity</a>
+        </div>
+        <div class="tool-card overflow-hidden mb-5">
+            {% if records %}
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead class="table-light">
+                            <tr><th scope="col">Date</th><th scope="col">Feature</th><th scope="col">Inputs / Image</th><th scope="col">Result</th><th scope="col" class="text-end">Action</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for record in records %}
+                                <tr>
+                                    <td class="text-nowrap small">{{ record.created_at }} UTC</td>
+                                    <td><span class="badge text-bg-success-subtle text-success-emphasis">{{ record.feature }}</span></td>
+                                    <td class="small">
+                                        {% for key, value in record.inputs.items() %}
+                                            <div><span class="text-secondary">{{ key|replace('_', ' ')|title }}:</span> {{ value }}</div>
+                                        {% endfor %}
+                                        {% if record.image_filename %}
+                                            <a class="d-inline-block mt-2" href="{{ url_for('static', filename='uploads/' ~ record.image_filename) }}" target="_blank" rel="noopener">View uploaded image</a>
+                                        {% endif %}
+                                    </td>
+                                    <td class="small" style="min-width: 220px;">{{ record.result }}</td>
+                                    <td class="text-end">
+                                        <form method="post" action="{{ url_for('admin_delete_record', record_id=record.id) }}" onsubmit="return confirm('Delete this record{% if record.image_filename %} and its uploaded image{% endif %}?');">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                            <button class="btn btn-sm btn-outline-danger text-nowrap" type="submit"><i class="bi bi-trash me-1" aria-hidden="true"></i>Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="p-4 p-md-5 text-center">
+                    <div class="feature-icon mx-auto"><i class="bi bi-clipboard-data" aria-hidden="true"></i></div>
+                    <h3 class="h5 fw-bold text-forest">No predictions yet</h3>
+                    <p class="text-secondary mb-0">Crop screening, Soil Health Card guidance, and model-backed disease results appear here after successful processing.</p>
+                </div>
+            {% endif %}
+        </div>
+        {% if total_pages > 1 %}
+            <nav aria-label="Prediction history pages" class="mb-5">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item {% if page <= 1 %}disabled{% endif %}"><a class="page-link" href="{{ url_for('admin_dashboard', page=page - 1) }}">Previous</a></li>
+                    <li class="page-item disabled"><span class="page-link">Page {{ page }} of {{ total_pages }}</span></li>
+                    <li class="page-item {% if page >= total_pages %}disabled{% endif %}"><a class="page-link" href="{{ url_for('admin_dashboard', page=page + 1) }}">Next</a></li>
+                </ul>
+            </nav>
+        {% endif %}
+
+        <div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-3">
+            <div>
+                <div class="section-kicker mb-1">Uploads</div>
+                <h2 class="h3 fw-bold text-forest mb-0">Disease detection images</h2>
+            </div>
+            <span class="badge rounded-pill text-bg-light border px-3 py-2">{{ images|length }} images</span>
+        </div>
+        {% if images %}
+            <div class="row g-3">
+                {% for image in images %}
+                    <div class="col-6 col-md-4 col-xl-3">
+                        <article class="feature-card p-3">
+                            <a href="{{ image.url }}" target="_blank" rel="noopener">
+                                <img class="img-fluid rounded-3 w-100 mb-3" src="{{ image.url }}" alt="Uploaded disease detection image" loading="lazy" style="height: 160px; object-fit: cover;">
+                            </a>
+                            <p class="small text-secondary text-truncate mb-2" title="{{ image.filename }}">{{ image.filename }}</p>
+                            <form method="post" action="{{ url_for('admin_delete_image', filename=image.filename) }}" onsubmit="return confirm('Permanently delete this uploaded image?');">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                <button class="btn btn-sm btn-outline-danger w-100" type="submit"><i class="bi bi-trash me-1" aria-hidden="true"></i>Delete image</button>
+                            </form>
+                        </article>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="tool-card p-4 text-secondary">No uploaded images to manage.</div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
